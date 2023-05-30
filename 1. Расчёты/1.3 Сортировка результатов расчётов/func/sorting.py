@@ -10,6 +10,10 @@ def sorting(df):
     h1_counter_0 = round((df["h1 [град]"].max() - df["h1 [град]"].min()) / 2.5 + 1)
     n12_counter_0 = round((df["n1 [об/мин]"].max() - df["n1 [об/мин]"].min()) / 250 + 1)
 
+    # Пережиток с CFX, там у DI нельзя ставить 0
+    df.loc[(df['n1 [об/мин]'] == 0.01), 'n1 [об/мин]'] = 0 
+    df.loc[(df['n2 [об/мин]'] == -0.01), 'n2 [об/мин]'] = 0   
+
     df_done = pd.DataFrame()
 
     Vx_0 = df["Vн [км/ч]"].min()

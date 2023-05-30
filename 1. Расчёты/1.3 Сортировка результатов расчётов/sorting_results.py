@@ -27,5 +27,6 @@ def sorting_results():
     df_1 = sorting(df_1)
     df_2 = sorting(df_2)
     
-    print(df_2)
-sorting_results()    
+    return df_2
+
+print(sorting_results())
