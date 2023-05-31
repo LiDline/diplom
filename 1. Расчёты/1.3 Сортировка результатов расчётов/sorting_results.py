@@ -11,7 +11,6 @@ from func.union_results import union_results
 from func.sorting import sorting
 
 
-
 def sorting_results():
 
     '''1. Импортируем нужные файлы и создадим из них одну таблицу'''
@@ -27,6 +26,4 @@ def sorting_results():
     df_1 = sorting(df_1)
     df_2 = sorting(df_2)
     
-    return df_2
-
-print(sorting_results())
+    return df_1, df_2

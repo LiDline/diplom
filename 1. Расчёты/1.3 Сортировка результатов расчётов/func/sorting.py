@@ -2,27 +2,28 @@ import pandas as pd
 import warnings
 
 
+import constants
 # Отключаем FutureWarning
 warnings.filterwarnings("ignore", category=FutureWarning)
 
-def sorting(df):
-    Vn_counter_0 = round((df["Vн [км/ч]"].max() - df["Vн [км/ч]"].min()) / 2.5 + 1)
-    h1_counter_0 = round((df["h1 [град]"].max() - df["h1 [град]"].min()) / 2.5 + 1)
-    n12_counter_0 = round((df["n1 [об/мин]"].max() - df["n1 [об/мин]"].min()) / 250 + 1)
+Vx_step = constants.VX_STEP_ANSYS
+h_step = constants.H_STEP_ANSYS
+n_step = constants.N_STEP_ANSYS
 
+def sorting(df):
+    df['h2 [град]'] *=-1
+    df['n2 [об/мин]'] *=-1
     # Пережиток с CFX, там у DI нельзя ставить 0
     df.loc[(df['n1 [об/мин]'] == 0.01), 'n1 [об/мин]'] = 0 
-    df.loc[(df['n2 [об/мин]'] == -0.01), 'n2 [об/мин]'] = 0   
+    df.loc[(df['n2 [об/мин]'] == 0.01), 'n2 [об/мин]'] = 0   
 
+    Vn_counter_0 = round((df["Vн [км/ч]"].max() - df["Vн [км/ч]"].min()) / Vx_step + 1)
+    h1_counter_0 = round((df["h1 [град]"].max() - df["h1 [град]"].min()) / h_step + 1)
+    n12_counter_0 = round((df["n1 [об/мин]"].max() - df["n1 [об/мин]"].min()) / n_step + 1)
     df_done = pd.DataFrame()
 
     Vx_0 = df["Vн [км/ч]"].min()
-    Vx_step = 2.5
-
-    h_step = 2.5
-
     n_0 = df["n1 [об/мин]"].min()
-    n_step = 250
 
     for i in range(0, Vn_counter_0):  # Смотрю куски по Vн
         df_Vx = pd.DataFrame()
