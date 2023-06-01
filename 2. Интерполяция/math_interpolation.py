@@ -19,6 +19,7 @@ sys.path.insert(
 from sorting_results import sorting_results
 from func.scipy_interpolation_n2 import scipy_interpolation_n2
 from func.scipy_interpolation_h2 import scipy_interpolation_h2
+from func.scipy_interpolation_n1 import scipy_interpolation_n1
 
 
 kind = constants.KIND[5]
@@ -56,17 +57,37 @@ def math_interpolation(df):
     """Интерполяция по h2"""
 
     (
-        T1_inter_h2_matrix, T2_inter_h2_matrix,Rring1_inter_h2_matrix,Rring2_inter_h2_matrix,
-        Rwmg_inter_h2_matrix,Rbody_inter_h2_matrix,Rsum_inter_h2_matrix,
-        Mx1_inter_h2_matrix,Mx2_inter_h2_matrix,MxWMG_inter_h2_matrix,
-        MxSum_inter_h2_matrix
+        T1_inter_h2_string, T2_inter_h2_string,Rring1_inter_h2_string,Rring2_inter_h2_string,
+        Rwmg_inter_h2_string,Rbody_inter_h2_string,Rsum_inter_h2_string,
+        Mx1_inter_h2_string,Mx2_inter_h2_string,MxWMG_inter_h2_string,
+        MxSum_inter_h2_string
         ) = scipy_interpolation_h2(
         df,h2_counter_0, h1_counter_0,n1_counter_0,
         T1_inter_n2,T2_inter_n2,Rring1_inter_n2,Rring2_inter_n2,Rwmg_inter_n2,
         Rbody_inter_n2, Rsum_inter_n2,Mx1_inter_n2, Mx2_inter_n2,
         MxWMG_inter_n2,MxSum_inter_n2, list1,
     )
-    return len(T1_inter_h2_matrix), T1_inter_h2_matrix
+
+    """Интерполяция по n1"""
+
+    scipy_interpolation_n1(
+        df,T1_inter_h2_string, T2_inter_h2_string,Rring1_inter_h2_string,Rring2_inter_h2_string,
+        Rwmg_inter_h2_string,Rbody_inter_h2_string,Rsum_inter_h2_string,
+        Mx1_inter_h2_string,Mx2_inter_h2_string,MxWMG_inter_h2_string,
+        MxSum_inter_h2_string,h1_counter_0,list1
+        )
+    print(len(T1_inter_h2_string),T1_inter_h2_string)
+    print(len(T2_inter_h2_string),T2_inter_h2_string)
+    print(len(Rring1_inter_h2_string),Rring1_inter_h2_string)
+    print(len(Rring2_inter_h2_string),Rring2_inter_h2_string)
+    print(len(Rwmg_inter_h2_string),Rwmg_inter_h2_string)
+    print(len(Rbody_inter_h2_string),Rbody_inter_h2_string)
+    print(len(Rsum_inter_h2_string),Rsum_inter_h2_string)
+    print(len(Mx1_inter_h2_string),Mx1_inter_h2_string)
+    print(len(Mx2_inter_h2_string),Mx2_inter_h2_string)
+    print(len(MxWMG_inter_h2_string),MxWMG_inter_h2_string)
+    print(len(MxSum_inter_h2_string),MxSum_inter_h2_string)
+    return len(T1_inter_h2_string), T1_inter_h2_string
 
 if __name__ == '__main__':
     df_1, df_2 = sorting_results()
