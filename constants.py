@@ -43,7 +43,7 @@ H_STEP_ANSYS = 2.5
 N_STEP_ANSYS = 250
 
 # Тип интерполяции
-KIND = [
+KIND_LIST = [
     "linear",
     "nearest",
     "zero",
@@ -53,6 +53,7 @@ KIND = [
     "previous",
     "next",
 ]
+KIND = KIND_LIST[5]
 
 N_STEP_INTER = 125
 H_STEP_INTER = 1.25

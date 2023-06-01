@@ -6,7 +6,7 @@ import pandas as pd
 import constants
 
 
-kind = constants.KIND[5]
+kind = constants.KIND
 Vn_step = constants.VX_STEP_ANSYS
 h_step = constants.H_STEP_ANSYS
 n_step = constants.N_STEP_ANSYS
@@ -14,12 +14,13 @@ n_inter = constants.N_STEP_INTER
 h_inter = constants.H_STEP_INTER
 Vx_inter = constants.VX_STEP_INTER
 name = constants.INTERPOLATED_CHARACTERISTICS
+param = constants.COLUMNS_AFTER_TRANSITION[4]
 
 """Интерполяция по n2"""
 
 def scipy_interpolation_n2(df, Vn_counter_0, h1_counter_0, n1_counter_0, h2_counter_0, n2_counter_0):
 
-    n2 = np.array(df.loc[:n2_counter_0-1, 'n2 [об/мин]'].values, np.float64)
+    n2 = np.array(df.loc[:n2_counter_0-1, param].values, np.float64)
     R_sum = np.array(df.loc[:, 'R сум [Н]'].values)
     df_Vx = pd.DataFrame()
     df_Vx = df[(df['Vн [км/ч]'] == df['Vн [км/ч]'].min())]
@@ -28,14 +29,14 @@ def scipy_interpolation_n2(df, Vn_counter_0, h1_counter_0, n1_counter_0, h2_coun
     parametr = []
     list1 = []
 
-    Vn_counter_n2 = h1_counter_0*n1_counter_0*h2_counter_0*len(np.arange(int(df['n2 [об/мин]'].min()),int(df['n2 [об/мин]'].max())+n_inter,n_inter))
+    Vn_counter_n2 = h1_counter_0*n1_counter_0*h2_counter_0*len(np.arange(int(df[param].min()),int(df[param].max())+n_inter,n_inter))
     len_inter1 = Vn_counter_n2 * (len(R_sum)//len_Vx1)
 
     for l in range (0, len(name)):
         for i in range (0, len(R_sum), n2_counter_0):
             R1 = np.array(df.loc[i:i+n2_counter_0-1, name[l]].values)
             f = interpolate.interp1d(n2, R1, kind = kind)
-            list1 = f(np.arange(int(df['n2 [об/мин]'].min()),int(df['n2 [об/мин]'].max())+n_inter,n_inter))
+            list1 = f(np.arange(int(df[param].min()),int(df[param].max())+n_inter,n_inter))
             parametr = np.append(parametr, list1)    
         l += 1
         

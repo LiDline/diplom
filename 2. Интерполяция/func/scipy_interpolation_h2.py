@@ -14,7 +14,7 @@ n_step = constants.N_STEP_ANSYS
 n_inter = constants.N_STEP_INTER
 h_inter = constants.H_STEP_INTER
 Vx_inter = constants.VX_STEP_INTER
-name = constants.INTERPOLATED_CHARACTERISTICS
+param = constants.COLUMNS_AFTER_TRANSITION[3]
 
 """Интерполяция по h2"""
 
@@ -57,41 +57,42 @@ def scipy_interpolation_h2(
     R1 = np.array(T1_inter_n2_matrix[:,:1])
 
     T1_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*  #количество диапазонов от 20 до 30
-                               len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)), len(list1)))
-    T2_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)),
+                               len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter)), len(list1)))
+    T2_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter)),
                             len(list1)))
-    Rring1_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)),
+    Rring1_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter)),
                             len(list1)))
-    Rring2_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)),
+    Rring2_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter)),
                             len(list1)))
-    Rwmg_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)),
+    Rwmg_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter)),
                             len(list1)))
-    Rbody_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)),
+    Rbody_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter)),
                             len(list1)))
-    Rsum_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)),
+    Rsum_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter)),
                             len(list1)))
         
-    Mx1_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)),
+    Mx1_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter)),
                             len(list1)))
-    Mx2_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)),
+    Mx2_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter)),
                             len(list1)))
-    MxWMG_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)),
+    MxWMG_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter)),
                             len(list1)))
-    MxSum_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)),
+    MxSum_inter_h2_matrix = np.zeros((len(R1)//h2_counter_0*len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter)),
                             len(list1)))   
 
+    list = len(list1)
     arguments = [
-        (df, T1_inter_n2_matrix, T1_inter_h2_matrix, h2_counter_0, h_inter, 'h2 [град]', h2, list1),
-        (df, T2_inter_n2_matrix, T2_inter_h2_matrix, h2_counter_0, h_inter, 'h2 [град]', h2, list1),
-        (df, Rring1_inter_n2_matrix, Rring1_inter_h2_matrix, h2_counter_0, h_inter, 'h2 [град]', h2, list1),
-        (df, Rring2_inter_n2_matrix, Rring2_inter_h2_matrix, h2_counter_0, h_inter, 'h2 [град]', h2, list1),
-        (df, Rwmg_inter_n2_matrix, Rwmg_inter_h2_matrix, h2_counter_0, h_inter, 'h2 [град]', h2, list1),
-        (df, Rbody_inter_n2_matrix, Rbody_inter_h2_matrix, h2_counter_0, h_inter, 'h2 [град]', h2, list1),
-        (df, Rsum_inter_n2_matrix, Rsum_inter_h2_matrix, h2_counter_0, h_inter, 'h2 [град]', h2, list1),
-        (df, Mx1_inter_n2_matrix, Mx1_inter_h2_matrix, h2_counter_0, h_inter, 'h2 [град]', h2, list1),
-        (df, Mx2_inter_n2_matrix, Mx2_inter_h2_matrix, h2_counter_0, h_inter, 'h2 [град]', h2, list1),
-        (df, MxWMG_inter_n2_matrix, MxWMG_inter_h2_matrix, h2_counter_0, h_inter, 'h2 [град]', h2, list1),
-        (df, MxSum_inter_n2_matrix, MxSum_inter_h2_matrix, h2_counter_0, h_inter, 'h2 [град]', h2, list1),
+        (df, T1_inter_n2_matrix, T1_inter_h2_matrix, h2_counter_0, h_inter, param, h2, list),
+        (df, T2_inter_n2_matrix, T2_inter_h2_matrix, h2_counter_0, h_inter, param, h2, list),
+        (df, Rring1_inter_n2_matrix, Rring1_inter_h2_matrix, h2_counter_0, h_inter, param, h2, list),
+        (df, Rring2_inter_n2_matrix, Rring2_inter_h2_matrix, h2_counter_0, h_inter, param, h2, list),
+        (df, Rwmg_inter_n2_matrix, Rwmg_inter_h2_matrix, h2_counter_0, h_inter, param, h2, list),
+        (df, Rbody_inter_n2_matrix, Rbody_inter_h2_matrix, h2_counter_0, h_inter, param, h2, list),
+        (df, Rsum_inter_n2_matrix, Rsum_inter_h2_matrix, h2_counter_0, h_inter, param, h2, list),
+        (df, Mx1_inter_n2_matrix, Mx1_inter_h2_matrix, h2_counter_0, h_inter, param, h2, list),
+        (df, Mx2_inter_n2_matrix, Mx2_inter_h2_matrix, h2_counter_0, h_inter, param, h2, list),
+        (df, MxWMG_inter_n2_matrix, MxWMG_inter_h2_matrix, h2_counter_0, h_inter, param, h2, list),
+        (df, MxSum_inter_n2_matrix, MxSum_inter_h2_matrix, h2_counter_0, h_inter, param, h2, list),
     ]
 
     with multiprocessing.Pool() as pool:
@@ -99,11 +100,11 @@ def scipy_interpolation_h2(
     a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 = results
 
     # Количество диапазонов значений h2 от 20 до 30
-    len_counter = len(list1)*len(R1)//h2_counter_0*len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter))
-    i_counter_2 = len(R1)//h2_counter_0 * len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter))
+    len_counter = len(list1)*len(R1)//h2_counter_0*len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))
+    i_counter_2 = len(R1)//h2_counter_0 * len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))
     j_counter_2 = len(list1)
 
     return from_matrix_in_string(   # Записал новые значения в виде строки для следующего преобразования
-        a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, list1, R1, h2_counter_0, h_inter, df, 
+        a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11,
         len_counter, i_counter_2, j_counter_2
     )

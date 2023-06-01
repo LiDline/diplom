@@ -3,7 +3,7 @@ import numpy as np
 
 
 # Записал новые значения в виде строки для следующего преобразования
-def from_matrix_in_string(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, list1, R1, h2_counter_0, h_inter, df, 
+def from_matrix_in_string(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11,
                           len_counter, i_counter, j_counter):
 
     k = 0
