@@ -20,6 +20,7 @@ from sorting_results import sorting_results
 from func.scipy_interpolation_n2 import scipy_interpolation_n2
 from func.scipy_interpolation_h2 import scipy_interpolation_h2
 from func.scipy_interpolation_n1 import scipy_interpolation_n1
+from func.scipy_interpolation_h1 import scipy_interpolation_h1
 
 
 Vn_step = constants.VX_STEP_ANSYS
@@ -73,6 +74,7 @@ def math_interpolation(df):
         T1_inter_n1_string,T2_inter_n1_string,Rring1_inter_n1_string,Rring2_inter_n1_string,
         Rwmg_inter_n1_string,Rbody_inter_n1_string,Rsum_inter_n1_string,
         Mx1_inter_n1_string,Mx2_inter_n1_string,MxWMG_inter_n1_string,MxSum_inter_n1_string,
+        T1_inter_n1_matrix
     ) = scipy_interpolation_n1(
         df,T1_inter_h2_string, T2_inter_h2_string,Rring1_inter_h2_string,Rring2_inter_h2_string,
         Rwmg_inter_h2_string,Rbody_inter_h2_string,Rsum_inter_h2_string,
@@ -80,7 +82,20 @@ def math_interpolation(df):
         MxSum_inter_h2_string,h1_counter_0,n1_counter_0
         )
 
-    return len(T1_inter_n1_string), T1_inter_n1_string
+
+    """Интерполяция по h1"""
+
+    (
+        T1_inter_h1_string,T2_inter_h1_string,Rring1_inter_h1_string,Rring2_inter_h1_string,
+        Rwmg_inter_h1_string,Rbody_inter_h1_string,Rsum_inter_h1_string,
+        Mx1_inter_h1_string,Mx2_inter_h1_string,MxWMG_inter_h1_string,MxSum_inter_h1_string
+    ) = scipy_interpolation_h1(T1_inter_n1_string,T2_inter_n1_string,Rring1_inter_n1_string,Rring2_inter_n1_string,
+        Rwmg_inter_n1_string,Rbody_inter_n1_string,Rsum_inter_n1_string,
+        Mx1_inter_n1_string,Mx2_inter_n1_string,MxWMG_inter_n1_string,MxSum_inter_n1_string,
+        df, T1_inter_n1_matrix, list1, Vn_counter_0, h1_counter_0)
+
+
+    return len(T1_inter_h1_string), T1_inter_h1_string[28456]
 
 if __name__ == '__main__':
     df_1, df_2 = sorting_results()

@@ -99,7 +99,18 @@ def scipy_interpolation_n1(
     i_counter_2 = len(R1)//n1_counter_0*len(np.arange(df['n2 [об/мин]'].min(), df['n2 [об/мин]'].max()+n_inter, n_inter))
     j_counter_2 = len(T1_inter_n1_matrix[:1,:].transpose())
 
-    return from_matrix_in_string(   # Записал новые значения в виде строки для следующего преобразования
+    (
+        T1_inter_n1_string,T2_inter_n1_string,Rring1_inter_n1_string,Rring2_inter_n1_string,
+        Rwmg_inter_n1_string,Rbody_inter_n1_string,Rsum_inter_n1_string,
+        Mx1_inter_n1_string,Mx2_inter_n1_string,MxWMG_inter_n1_string,MxSum_inter_n1_string
+    ) = from_matrix_in_string(   # Записал новые значения в виде строки для следующего преобразования
         b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11,
         len_counter, i_counter_2, j_counter_2
+    )
+
+    return (
+        T1_inter_n1_string,T2_inter_n1_string,Rring1_inter_n1_string,Rring2_inter_n1_string,
+        Rwmg_inter_n1_string,Rbody_inter_n1_string,Rsum_inter_n1_string,
+        Mx1_inter_n1_string,Mx2_inter_n1_string,MxWMG_inter_n1_string,MxSum_inter_n1_string,
+        T1_inter_n1_matrix  # Используется для n1
     ) 
