@@ -104,6 +104,8 @@ def scipy_interpolation_h2(
     i_counter_2 = len(R1)//h2_counter_0 * len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))
     j_counter_2 = len(list1)
 
+    print('Интерполяция по h2 завершена.')
+    
     return from_matrix_in_string(   # Записал новые значения в виде строки для следующего преобразования
         a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11,
         len_counter, i_counter_2, j_counter_2

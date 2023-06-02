@@ -59,6 +59,8 @@ def scipy_interpolation_n2(df, Vn_counter_0, h1_counter_0, n1_counter_0, h2_coun
 
     MxSum_inter_n2 = parametr[name.index('Mx сум [Н*м]')*len_inter1 : name.index('Mx сум [Н*м]')*len_inter1+len_inter1]
 
+    print('Интерполяция по n2 завершена.')
+
     return (
         T1_inter_n2,
         T2_inter_n2,

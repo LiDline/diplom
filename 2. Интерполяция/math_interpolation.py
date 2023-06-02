@@ -1,8 +1,6 @@
-import pandas as pd
-import numpy as np
 import sys
 import os
-import multiprocessing
+from timeit import default_timer as timer
 
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__))))
@@ -21,6 +19,8 @@ from func.scipy_interpolation_n2 import scipy_interpolation_n2
 from func.scipy_interpolation_h2 import scipy_interpolation_h2
 from func.scipy_interpolation_n1 import scipy_interpolation_n1
 from func.scipy_interpolation_h1 import scipy_interpolation_h1
+from func.scipy_interpolation_vx import scipy_interpolation_vx
+from func.in_csv import in_csv
 
 
 Vn_step = constants.VX_STEP_ANSYS
@@ -45,6 +45,8 @@ def math_interpolation(df):
     )
 
     """Интерполяция по n2"""
+
+    print('Начало интерполяции...')
 
     (
         T1_inter_n2,T2_inter_n2,Rring1_inter_n2,Rring2_inter_n2,
@@ -94,9 +96,34 @@ def math_interpolation(df):
         Mx1_inter_n1_string,Mx2_inter_n1_string,MxWMG_inter_n1_string,MxSum_inter_n1_string,
         df, T1_inter_n1_matrix, list1, Vn_counter_0, h1_counter_0)
 
+    """Интерполяция по Vx"""
 
-    return len(T1_inter_h1_string), T1_inter_h1_string[28456]
+    (
+        T1_inter_Vx_string,T2_inter_Vx_string,Rring1_inter_Vx_string,Rring2_inter_Vx_string,
+        Rwmg_inter_Vx_string,Rbody_inter_Vx_string,Rsum_inter_Vx_string,
+        Mx1_inter_Vx_string,Mx2_inter_Vx_string,MxWMG_inter_Vx_string,MxSum_inter_Vx_string,
+        Vn_counter_h1
+        
+    ) = scipy_interpolation_vx(
+        T1_inter_h1_string,T2_inter_h1_string,Rring1_inter_h1_string,Rring2_inter_h1_string,
+        Rwmg_inter_h1_string,Rbody_inter_h1_string,Rsum_inter_h1_string,
+        Mx1_inter_h1_string,Mx2_inter_h1_string,MxWMG_inter_h1_string,MxSum_inter_h1_string,
+        df,Vn_counter_0
+    )
+
+    """Запишем данные в таблицу"""
+
+    df_inter = in_csv(
+        T1_inter_Vx_string,T2_inter_Vx_string,Rring1_inter_Vx_string,Rring2_inter_Vx_string,
+        Rwmg_inter_Vx_string,Rbody_inter_Vx_string,Rsum_inter_Vx_string,
+        Mx1_inter_Vx_string,Mx2_inter_Vx_string,MxWMG_inter_Vx_string,MxSum_inter_Vx_string,
+        df,list1,Vn_counter_h1
+    )
+
+    return df_inter
 
 if __name__ == '__main__':
+    start = timer()
     df_1, df_2 = sorting_results()
-    print(math_interpolation(df_1))
+    print(math_interpolation(df_2).head(10586))
+    print('Программа завершена. Время выполнения:', timer() - start, '[сек]')

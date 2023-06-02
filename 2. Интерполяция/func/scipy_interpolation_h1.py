@@ -27,7 +27,6 @@ def scipy_interpolation_h1(T1_inter_n1_string,T2_inter_n1_string,Rring1_inter_n1
                                                 len(np.arange(0,int(df['n2 [об/мин]'].max())+n_inter,n_inter)))
 
     # Записал новые значения в виде матрицы, где каждая строка - это h1
-    
     i_counter_1 = len(T1_inter_n1_string)//(len(T1_inter_n1_matrix[:1,:].transpose())*len(list1))
     j_counter_1 = len(T1_inter_n1_matrix[:1,:].transpose())*len(list1)
 
@@ -42,33 +41,32 @@ def scipy_interpolation_h1(T1_inter_n1_string,T2_inter_n1_string,Rring1_inter_n1
         i_counter_1, j_counter_1
     )
 
-    R1 = np.array(T1_inter_h1_matrix[:,:1])
-    h1 = np.arange(df[param].min(), df[param].max()+2.5, 2.5)
+    h1 = np.arange(df[param].min(), df[param].max()+h_step, h_step)
     
-    T1_inter_h1 = np.zeros((len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*Vn_counter_0, 
+    T1_inter_h1 = np.zeros((len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*Vn_counter_0, 
                               len(T1_inter_h1_matrix[:1,:].transpose())
                               ))
-    T2_inter_h1 = np.zeros((len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*Vn_counter_0, 
+    T2_inter_h1 = np.zeros((len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*Vn_counter_0, 
                               len(T1_inter_h1_matrix[:1,:].transpose())))
-    Rring1_inter_h1 = np.zeros((len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*Vn_counter_0, 
+    Rring1_inter_h1 = np.zeros((len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*Vn_counter_0, 
                               len(T1_inter_h1_matrix[:1,:].transpose())))
-    Rring2_inter_h1 = np.zeros((len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*Vn_counter_0, 
+    Rring2_inter_h1 = np.zeros((len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*Vn_counter_0, 
                               len(T1_inter_h1_matrix[:1,:].transpose())))
-    Rwmg_inter_h1 = np.zeros((len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*Vn_counter_0, 
+    Rwmg_inter_h1 = np.zeros((len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*Vn_counter_0, 
                               len(T1_inter_h1_matrix[:1,:].transpose())))
-    Rbody_inter_h1 = np.zeros((len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*Vn_counter_0, 
+    Rbody_inter_h1 = np.zeros((len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*Vn_counter_0, 
                               len(T1_inter_h1_matrix[:1,:].transpose())))
-    Rsum_inter_h1 = np.zeros((len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*Vn_counter_0, 
+    Rsum_inter_h1 = np.zeros((len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*Vn_counter_0, 
                               len(T1_inter_h1_matrix[:1,:].transpose())))
 
 
-    Mx1_inter_h1 = np.zeros((len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*Vn_counter_0, 
+    Mx1_inter_h1 = np.zeros((len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*Vn_counter_0, 
                               len(T1_inter_h1_matrix[:1,:].transpose())))
-    Mx2_inter_h1 = np.zeros((len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*Vn_counter_0, 
+    Mx2_inter_h1 = np.zeros((len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*Vn_counter_0, 
                               len(T1_inter_h1_matrix[:1,:].transpose())))
-    MxWMG_inter_h1 = np.zeros((len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*Vn_counter_0, 
+    MxWMG_inter_h1 = np.zeros((len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*Vn_counter_0, 
                               len(T1_inter_h1_matrix[:1,:].transpose())))
-    MxSum_inter_h1 = np.zeros((len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*Vn_counter_0, 
+    MxSum_inter_h1 = np.zeros((len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*Vn_counter_0, 
                               len(T1_inter_h1_matrix[:1,:].transpose())))  
 
     list = len(T1_inter_h1_matrix[:1,:].transpose())
@@ -91,9 +89,9 @@ def scipy_interpolation_h1(T1_inter_n1_string,T2_inter_n1_string,Rring1_inter_n1
     a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 = results
 
     # Количество диапазонов значений h1 от 20 до 30
-    len_counter = (len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*
+    len_counter = (len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*
                                 len(T1_inter_h1_matrix[:1,:].transpose())*Vn_counter_0)
-    i_counter_2 = len(np.arange(df['h1 [град]'].min(), df['h1 [град]'].max()+h_inter, h_inter))*Vn_counter_0
+    i_counter_2 = len(np.arange(df[param].min(), df[param].max()+h_inter, h_inter))*Vn_counter_0
     j_counter_2 = len(T1_inter_h1_matrix[:1,:].transpose())
 
     (
@@ -104,6 +102,7 @@ def scipy_interpolation_h1(T1_inter_n1_string,T2_inter_n1_string,Rring1_inter_n1
         a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11,
         len_counter, i_counter_2, j_counter_2
     )
+    print('Интерполяция по h1 завершена.')
 
     return (
         T1_inter_h1_string,T2_inter_h1_string,Rring1_inter_h1_string,Rring2_inter_h1_string,

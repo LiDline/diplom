@@ -23,15 +23,16 @@ def scipy_interpolation_n1(
         MxSum_inter_h2_string,h1_counter_0,n1_counter_0
         ):
 
-    Vn_counter_n1 = (h1_counter_0 * len(np.arange(0,int(df[param].max())+n_inter,n_inter)) *
+    Vn_counter_n1 = (h1_counter_0 * len(np.arange(0,int(df['n2 [об/мин]'].max())+n_inter,n_inter)) *
                                                 len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)) *
-                                                len(np.arange(0,int(df[param].max())+n_inter,n_inter)))
+                                                len(np.arange(0,int(df['n2 [об/мин]'].max())+n_inter,n_inter)))
     
 
     # Записал новые значения в виде матрицы, где каждая строка - это n1
-    i_counter_1 = len(T1_inter_h2_string)//(len(np.arange(0,int(df[param].max())+n_inter,n_inter))*
-                                  len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)))
-    j_counter_1 = (len(np.arange(0,int(df[param].max())+n_inter,n_inter))*
+    i_counter_1 = (len(T1_inter_h2_string)//
+                                  (len(np.arange(int(df['n2 [об/мин]'].min()),int(df['n2 [об/мин]'].max())+n_inter,n_inter))*
+                                  len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter))))
+    j_counter_1 = (len(np.arange(int(df['n2 [об/мин]'].min()),int(df['n2 [об/мин]'].max())+n_inter,n_inter))*
                                   len(np.arange(df['h2 [град]'].min(), df['h2 [град]'].max()+h_inter, h_inter)))
     (
       T1_inter_n1_matrix,T2_inter_n1_matrix,Rring1_inter_n1_matrix,Rring2_inter_n1_matrix,
@@ -94,9 +95,9 @@ def scipy_interpolation_n1(
     
     # Количество диапазонов значений n1 0 до 1000
     len_counter = (len(R1)//n1_counter_0*
-                           len(np.arange(df['n2 [об/мин]'].min(), df['n2 [об/мин]'].max()+n_inter, n_inter))*
+                           len(np.arange(df[param].min(), df[param].max()+n_inter, n_inter))*
                             len(T1_inter_n1_matrix[:1,:].transpose()))
-    i_counter_2 = len(R1)//n1_counter_0*len(np.arange(df['n2 [об/мин]'].min(), df['n2 [об/мин]'].max()+n_inter, n_inter))
+    i_counter_2 = len(R1)//n1_counter_0*len(np.arange(df[param].min(), df[param].max()+n_inter, n_inter))
     j_counter_2 = len(T1_inter_n1_matrix[:1,:].transpose())
 
     (
@@ -107,6 +108,8 @@ def scipy_interpolation_n1(
         b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11,
         len_counter, i_counter_2, j_counter_2
     )
+
+    print('Интерполяция по n1 завершена.')
 
     return (
         T1_inter_n1_string,T2_inter_n1_string,Rring1_inter_n1_string,Rring2_inter_n1_string,
