@@ -1,8 +1,11 @@
 import pandas as pd
 import numpy as np
+import multiprocessing
+from multiprocessing import Pool
 
 
 import constants
+from r_swimmer import r_swimmer
 
 
 Vn_step = constants.VX_STEP_ANSYS
@@ -13,7 +16,16 @@ h_inter = constants.H_STEP_INTER
 Vx_inter = constants.VX_STEP_INTER
 
 
-def in_csv(
+def fill_n2_inter_5(chunk):
+    start, end, list = chunk
+    n2_inter_5 = []
+    for i in range(start, end):
+        n2_inter_5 = np.append(n2_inter_5, list)
+    return n2_inter_5
+
+
+
+def create_table(
         T1_inter_Vx_string,T2_inter_Vx_string,Rring1_inter_Vx_string,Rring2_inter_Vx_string,
         Rwmg_inter_Vx_string,Rbody_inter_Vx_string,Rsum_inter_Vx_string,
         Mx1_inter_Vx_string,Mx2_inter_Vx_string,MxWMG_inter_Vx_string,MxSum_inter_Vx_string,
@@ -25,10 +37,21 @@ def in_csv(
 
     """n2"""
 
-    n2_inter_5 = []
+    num_processes = multiprocessing.cpu_count()  # Получаем количество доступных процессоров
+    chunk_size = (len(T1_inter_Vx_string) // len(list1)) // num_processes
 
-    for i in range (0, len(T1_inter_Vx_string)//len(list1)):
-        n2_inter_5 = np.append(n2_inter_5, np.arange(int(df['n2 [об/мин]'].min()),int(df['n2 [об/мин]'].max())+n_inter,n_inter))
+    list_n2 = np.arange(int(df['n2 [об/мин]'].min()), int(df['n2 [об/мин]'].max()) + n_inter, n_inter)
+    chunks = [(i, i + chunk_size, list_n2) for i in range(0, len(T1_inter_Vx_string) // len(list1), chunk_size)]
+
+    with multiprocessing.Pool() as pool:
+        results = pool.map(fill_n2_inter_5, chunks)
+
+    n2_inter_5 = np.concatenate(results)[:len(T1_inter_Vx_string)]
+
+    # n2_inter_5 = []
+
+    # for i in range (0, len(T1_inter_Vx_string)//len(list1)):
+    #     n2_inter_5 = np.append(n2_inter_5, np.arange(int(df['n2 [об/мин]'].min()),int(df['n2 [об/мин]'].max())+n_inter,n_inter))
         
     print('--n2')
 
@@ -129,6 +152,20 @@ def in_csv(
     df_inter_5['n1 [об/мин]'] = n1_inter_5
     df_inter_5['h1 [град]'] = h1_inter_5
     df_inter_5['Vн [км/ч]'] = Vx_inter_5
+
+    """Так как расчётная модель аппарата была упрощённой, добавим разницу сопротивления пловца"""
+
+    R_swimmer = r_swimmer()
+    for i in np.arange (0, 28, 0.5):
+        df_inter_5.loc[df_inter_5.loc[:, 'Vн [км/ч]'] == i , "R тела [Н]"] += float(R_swimmer.loc[R_swimmer.loc[:, f'{constants.COLUMNS_AFTER_TRANSITION[0]}'] == i, 
+                                                                                              f'{constants.COLUMNS_AFTER_TRANSITION[10]}'])
+        df_inter_5.loc[df_inter_5.loc[:, 'Vн [км/ч]'] == i , "R сум [Н]"] += float(R_swimmer.loc[R_swimmer.loc[:, f'{constants.COLUMNS_AFTER_TRANSITION[0]}'] == i,
+                                                                                                    f'{constants.COLUMNS_AFTER_TRANSITION[10]}'])
+        
+    df_inter_5["Wв1 [Вт]"] = -df_inter_5['n1 [об/мин]']*df_inter_5['Mвx1 [Н*м]']*np.pi/30
+    df_inter_5["Wв2 [Вт]"] = -df_inter_5['n2 [об/мин]']*df_inter_5['Mвx2 [Н*м]']*np.pi/30
+    df_inter_5["W сум [Вт]"] = df_inter_5["Wв1 [Вт]"] + df_inter_5["Wв2 [Вт]"]
+    df_inter_5['Mкx [Н*м]'] = df_inter_5['Mx сум [Н*м]'] - df_inter_5['Mвx1 [Н*м]'] - df_inter_5['Mвx2 [Н*м]']
 
     print('Таблица создана.')
 

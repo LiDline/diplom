@@ -1,5 +1,6 @@
 import sys
 import os
+import numpy as np
 from timeit import default_timer as timer
 
 
@@ -14,13 +15,18 @@ sys.path.insert(
         "1.3 Сортировка результатов расчётов",
     ),
 )
+sys.path.insert(0,  os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "3. Обработка результатов",
+        "3.1 Дополнительные вычисления",
+        ))
 from sorting_results import sorting_results
 from func.scipy_interpolation_n2 import scipy_interpolation_n2
 from func.scipy_interpolation_h2 import scipy_interpolation_h2
 from func.scipy_interpolation_n1 import scipy_interpolation_n1
 from func.scipy_interpolation_h1 import scipy_interpolation_h1
 from func.scipy_interpolation_vx import scipy_interpolation_vx
-from func.in_csv import in_csv
+from func.create_table import create_table
 
 
 Vn_step = constants.VX_STEP_ANSYS
@@ -113,7 +119,7 @@ def math_interpolation(df):
 
     """Запишем данные в таблицу"""
 
-    df_inter = in_csv(
+    df_inter = create_table(
         T1_inter_Vx_string,T2_inter_Vx_string,Rring1_inter_Vx_string,Rring2_inter_Vx_string,
         Rwmg_inter_Vx_string,Rbody_inter_Vx_string,Rsum_inter_Vx_string,
         Mx1_inter_Vx_string,Mx2_inter_Vx_string,MxWMG_inter_Vx_string,MxSum_inter_Vx_string,
@@ -124,6 +130,9 @@ def math_interpolation(df):
 
 if __name__ == '__main__':
     start = timer()
-    df_1, df_2 = sorting_results()
-    print(math_interpolation(df_2).head(10586))
-    print('Программа завершена. Время выполнения:', timer() - start, '[сек]')
+    i = 1
+    for df in sorting_results():
+        math_interpolation(df).to_csv(f'Т1, серия {i} - инт.csv')
+        print(f'Интерполяция {i} завершена. Время выполнения:', timer() - start, '[сек]')
+        i += 1
+    
