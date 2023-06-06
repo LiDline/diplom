@@ -55,8 +55,21 @@ KIND_LIST = [
 ]
 KIND = KIND_LIST[5]
 
-N_STEP_INTER = 125
-H_STEP_INTER = 1.25
-VX_STEP_INTER = 1.25
+N_STEP_INTER = 50
+H_STEP_INTER = 0.5
+VX_STEP_INTER = 0.5
 
 INTERPOLATED_CHARACTERISTICS = COLUMNS_AFTER_TRANSITION[5:]
+
+NEW_CHARACTERISTICS = [
+    "Wв1 [Вт]",
+    "Wв2 [Вт]",
+    "W сум [Вт]",
+    'Mкx [Н*м]'
+]
+
+NAME_LEGEND = [f'n1 [0:{N_STEP_INTER}:1500]', f'n2 [0:{N_STEP_INTER}:1500]',f'h1 [20:{H_STEP_INTER}:35]',f'h2 [20:{H_STEP_INTER}:35]',
+               'Wв', '-Mвx1','Mвx2','Тв1','Тв2','Tк1','Tк2','Wв1', 'Wв2','MКx', '-R', 'T', 'Fx']
+
+MX_MAX = 0.2
+R_MAX = 4

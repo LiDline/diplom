@@ -1,11 +1,12 @@
 import pandas as pd
 import numpy as np
 import multiprocessing
-from multiprocessing import Pool
 
 
 import constants
 from r_swimmer import r_swimmer
+from func.fill_n2_inter_5 import fill_n2_inter_5
+from func.fill_h2_inter_5 import fill_h2_inter_5
 
 
 Vn_step = constants.VX_STEP_ANSYS
@@ -14,15 +15,6 @@ n_step = constants.N_STEP_ANSYS
 n_inter = constants.N_STEP_INTER
 h_inter = constants.H_STEP_INTER
 Vx_inter = constants.VX_STEP_INTER
-
-
-def fill_n2_inter_5(chunk):
-    start, end, list = chunk
-    n2_inter_5 = []
-    for i in range(start, end):
-        n2_inter_5 = np.append(n2_inter_5, list)
-    return n2_inter_5
-
 
 
 def create_table(
@@ -35,10 +27,10 @@ def create_table(
     print()
     print('Создание таблицы...')
 
-    """n2"""
-
     num_processes = multiprocessing.cpu_count()  # Получаем количество доступных процессоров
     chunk_size = (len(T1_inter_Vx_string) // len(list1)) // num_processes
+
+    """n2"""
 
     list_n2 = np.arange(int(df['n2 [об/мин]'].min()), int(df['n2 [об/мин]'].max()) + n_inter, n_inter)
     chunks = [(i, i + chunk_size, list_n2) for i in range(0, len(T1_inter_Vx_string) // len(list1), chunk_size)]
@@ -47,16 +39,20 @@ def create_table(
         results = pool.map(fill_n2_inter_5, chunks)
 
     n2_inter_5 = np.concatenate(results)[:len(T1_inter_Vx_string)]
-
-    # n2_inter_5 = []
-
-    # for i in range (0, len(T1_inter_Vx_string)//len(list1)):
-    #     n2_inter_5 = np.append(n2_inter_5, np.arange(int(df['n2 [об/мин]'].min()),int(df['n2 [об/мин]'].max())+n_inter,n_inter))
         
     print('--n2')
 
     """h2"""
 
+    # list_h2 = range(int(df['n2 [об/мин]'].min()), int(df['n2 [об/мин]'].max())+n_inter, n_inter)
+    # # chunks = [(i, i + chunk_size, list_h2, df) for i in range(0, len(T1_inter_Vx_string) // len(list1), chunk_size)]
+    # chunks = [(i * chunk_size, (i + 1) * chunk_size, list_h2, df) for i in range(num_processes)]
+    # chunks[-1] = (chunks[-1][0], len(T1_inter_Vx_string), list_n2, df)
+
+    # with multiprocessing.Pool() as pool:
+    #     results = pool.map(fill_h2_inter_5, chunks)
+
+    # h2_inter_5 = np.concatenate(results)[:len(T1_inter_Vx_string)]
     h2_inter_5 = []
     list20 = []
     k = df['h2 [град]'].min()   
@@ -162,10 +158,10 @@ def create_table(
         df_inter_5.loc[df_inter_5.loc[:, 'Vн [км/ч]'] == i , "R сум [Н]"] += float(R_swimmer.loc[R_swimmer.loc[:, f'{constants.COLUMNS_AFTER_TRANSITION[0]}'] == i,
                                                                                                     f'{constants.COLUMNS_AFTER_TRANSITION[10]}'])
         
-    df_inter_5["Wв1 [Вт]"] = -df_inter_5['n1 [об/мин]']*df_inter_5['Mвx1 [Н*м]']*np.pi/30
-    df_inter_5["Wв2 [Вт]"] = -df_inter_5['n2 [об/мин]']*df_inter_5['Mвx2 [Н*м]']*np.pi/30
-    df_inter_5["W сум [Вт]"] = df_inter_5["Wв1 [Вт]"] + df_inter_5["Wв2 [Вт]"]
-    df_inter_5['Mкx [Н*м]'] = df_inter_5['Mx сум [Н*м]'] - df_inter_5['Mвx1 [Н*м]'] - df_inter_5['Mвx2 [Н*м]']
+    df_inter_5[constants.NEW_CHARACTERISTICS[0]] = -df_inter_5['n1 [об/мин]']*df_inter_5['Mвx1 [Н*м]']*np.pi/30
+    df_inter_5[constants.NEW_CHARACTERISTICS[1]] = -df_inter_5['n2 [об/мин]']*df_inter_5['Mвx2 [Н*м]']*np.pi/30
+    df_inter_5[constants.NEW_CHARACTERISTICS[2]] = df_inter_5["Wв1 [Вт]"] + df_inter_5["Wв2 [Вт]"]
+    df_inter_5[constants.NEW_CHARACTERISTICS[3]] = df_inter_5['Mx сум [Н*м]'] - df_inter_5['Mвx1 [Н*м]'] - df_inter_5['Mвx2 [Н*м]']
 
     print('Таблица создана.')
 

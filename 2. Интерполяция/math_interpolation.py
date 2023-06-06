@@ -132,7 +132,7 @@ if __name__ == '__main__':
     start = timer()
     i = 1
     for df in sorting_results():
-        math_interpolation(df).to_csv(f'Т1, серия {i} - инт.csv')
+        math_interpolation(df).to_csv(f'Т1, серия {i} - инт 1.csv')
         print(f'Интерполяция {i} завершена. Время выполнения:', timer() - start, '[сек]')
         i += 1
     
