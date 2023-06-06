@@ -71,5 +71,5 @@ NEW_CHARACTERISTICS = [
 NAME_LEGEND = [f'n1 [0:{N_STEP_INTER}:1500]', f'n2 [0:{N_STEP_INTER}:1500]',f'h1 [20:{H_STEP_INTER}:35]',f'h2 [20:{H_STEP_INTER}:35]',
                'Wв', '-Mвx1','Mвx2','Тв1','Тв2','Tк1','Tк2','Wв1', 'Wв2','MКx', '-R', 'T', 'Fx']
 
-MX_MAX = 0.2
-R_MAX = 4
+MX_MAX = 0.15
+R_MAX = 6
